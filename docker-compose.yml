@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:
+  frontend:
+    build: .
+    container_name: react-frontend
+    expose:
+      - "80"  # expose ke network Docker saja
+    networks:
+      - webnet
+
+networks:
+  webnet:
+    driver: bridge
