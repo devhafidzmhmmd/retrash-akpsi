@@ -1,0 +1,146 @@
+[
+    {
+        "name": "Andi Saputra",
+        "address": "RT 03 / RW 05, Jl. Melati No. 12",
+        "size": 4,
+        "status": true,
+        "payment": true,
+        "bill": 0
+    },
+    {
+        "name": "Rina Marlina",
+        "address": "RT 04 / RW 02, Jl. Anggrek No. 8",
+        "size": 3,
+        "status": false,
+        "payment": false,
+        "bill": 100000
+    },
+    {
+        "name": "Budi Hartono",
+        "address": "RT 01 / RW 01, Jl. Cempaka No. 5",
+        "size": 5,
+        "status": true,
+        "payment": true,
+        "bill": 0
+    },
+    {
+        "name": "Siti Aminah",
+        "address": "RT 02 / RW 06, Jl. Dahlia No. 14",
+        "size": 2,
+        "status": true,
+        "payment": true,
+        "bill": 0
+    },
+    {
+        "name": "Dedi Kurniawan",
+        "address": "RT 05 / RW 03, Jl. Flamboyan No. 22",
+        "size": 4,
+        "status": true,
+        "payment": true,
+        "bill": 0
+    },
+    {
+        "name": "Ahmad Rizki",
+        "address": "RT 01 / RW 04, Jl. Mawar No. 7",
+        "size": 3,
+        "status": true,
+        "payment": true,
+        "bill": 0
+    },
+    {
+        "name": "Maya Sari",
+        "address": "RT 06 / RW 02, Jl. Kenanga No. 15",
+        "size": 2,
+        "status": false,
+        "payment": false,
+        "bill": 150000
+    },
+    {
+        "name": "Rudi Santoso",
+        "address": "RT 03 / RW 01, Jl. Tulip No. 9",
+        "size": 5,
+        "status": true,
+        "payment": true,
+        "bill": 0
+    },
+    {
+        "name": "Nina Wati",
+        "address": "RT 02 / RW 03, Jl. Teratai No. 11",
+        "size": 4,
+        "status": true,
+        "payment": true,
+        "bill": 0
+    },
+    {
+        "name": "Hendra Wijaya",
+        "address": "RT 04 / RW 05, Jl. Bougenville No. 18",
+        "size": 3,
+        "status": true,
+        "payment": true,
+        "bill": 0
+    },
+    {
+        "name": "Sri Wahyuni",
+        "address": "RT 05 / RW 02, Jl. Kamboja No. 21",
+        "size": 2,
+        "status": false,
+        "payment": false,
+        "bill": 120000
+    },
+    {
+        "name": "Agus Setiawan",
+        "address": "RT 01 / RW 06, Jl. Lily No. 3",
+        "size": 5,
+        "status": true,
+        "payment": true,
+        "bill": 0
+    },
+    {
+        "name": "Dewi Lestari",
+        "address": "RT 06 / RW 04, Jl. Krisan No. 16",
+        "size": 4,
+        "status": true,
+        "payment": true,
+        "bill": 0
+    },
+    {
+        "name": "Bambang Kusuma",
+        "address": "RT 03 / RW 03, Jl. Aster No. 13",
+        "size": 3,
+        "status": true,
+        "payment": true,
+        "bill": 0
+    },
+    {
+        "name": "Yuni Safitri",
+        "address": "RT 02 / RW 05, Jl. Lotus No. 25",
+        "size": 2,
+        "status": false,
+        "payment": false,
+        "bill": 110000
+    },
+    {
+        "name": "Fajar Ramadhan",
+        "address": "RT 04 / RW 03, Jl. Poppy No. 12",
+        "size": 5,
+        "status": true,
+        "payment": true,
+        "bill": 0
+    },
+    {
+        "name": "Nadia Putri",
+        "address": "RT 05 / RW 01, Jl. Sunflower No. 16",
+        "size": 4,
+        "status": true,
+        "payment": true,
+        "bill": 0
+    },
+    {
+        "name": "Arif Wicaksono",
+        "address": "RT 01 / RW 05, Jl. Lavender No. 1",
+        "size": 3,
+        "status": true,
+        "payment": true,
+        "bill": 0
+    }
+]

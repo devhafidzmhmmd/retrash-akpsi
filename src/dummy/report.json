@@ -1,0 +1,37 @@
+[
+    {
+        "id": 1,
+        "name": "Ahmad Rizki",
+        "date": "2024-01-15",
+        "content": "Melaporkan adanya kebocoran pipa air di dekat Jl. Mawar No. 12. Air menggenang dan mengganggu akses jalan warga.",
+        "image": "https://images.unsplash.com/photo-1584466977773-e625c37cdd50"
+    },
+    {
+        "id": 2,
+        "name": "Siti Aminah",
+        "date": "2024-01-12",
+        "content": "Tumpukan sampah di pojok RT 02 perlu segera dibersihkan. Menimbulkan bau tidak sedap dan mengundang lalat.",
+        "image": "https://images.unsplash.com/photo-1605600659908-0ef719419d41"
+    },
+    {
+        "id": 3,
+        "name": "Budi Hartono",
+        "date": "2024-01-10",
+        "content": "Lampu penerangan jalan di RT 01 mati sejak 3 hari yang lalu. Mohon dapat segera diperbaiki untuk keamanan warga di malam hari.",
+        "image": "https://images.unsplash.com/photo-1461988625982-7e46a099bf4f"
+    },
+    {
+        "id": 4,
+        "name": "Maya Sari",
+        "date": "2024-01-08",
+        "content": "Pohon besar di depan rumah Jl. Kenanga No. 15 perlu dipangkas. Ranting-ranting sudah mengganggu kabel listrik.",
+        "image": "https://images.unsplash.com/photo-1597324698575-1f9b1017c7e2"
+    },
+    {
+        "id": 5,
+        "name": "Dedi Kurniawan",
+        "date": "2024-01-05",
+        "content": "Selokan di RT 05 tersumbat dan air tidak mengalir. Perlu pembersihan segera sebelum musim hujan.",
+        "image": "https://images.unsplash.com/photo-1583608205776-bfd35f0d9f83"
+    }
+]

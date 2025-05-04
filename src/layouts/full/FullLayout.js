@@ -25,67 +25,60 @@ const FullLayout = () => {
   // const lgUp = useMediaQuery((theme) => theme.breakpoints.up("lg"));
 
   return (
-    <MainWrapper className="mainwrapper">
-      {/* ------------------------------------------- */}
-      {/* Sidebar */}
-      {/* ------------------------------------------- */}
-      <Sidebar
-        isSidebarOpen={isSidebarOpen}
-        isMobileSidebarOpen={isMobileSidebarOpen}
-        onSidebarClose={() => setMobileSidebarOpen(false)}
-      />
-      {/* ------------------------------------------- */}
-      {/* Main Wrapper */}
-      {/* ------------------------------------------- */}
-      <PageWrapper className="page-wrapper">
-        {/* ------------------------------------------- */}
-        {/* Header */}
-        {/* ------------------------------------------- */}
-        <Header
-          toggleSidebar={() => setSidebarOpen(!isSidebarOpen)}
-          toggleMobileSidebar={() => setMobileSidebarOpen(true)}
-        />
-        {/* ------------------------------------------- */}
-        {/* PageContent */}
-        {/* ------------------------------------------- */}
-        <Container
-          sx={{
-            paddingTop: "20px",
-            maxWidth: "1200px",
-          }}
-        >
+      <MainWrapper className="mainwrapper">
           {/* ------------------------------------------- */}
-          {/* Page Route */}
+          {/* Sidebar */}
           {/* ------------------------------------------- */}
-          <Box sx={{ minHeight: "calc(100vh - 170px)" }}>
-            <Outlet />
-          </Box>
-         
+          <Sidebar
+              isSidebarOpen={isSidebarOpen}
+              isMobileSidebarOpen={isMobileSidebarOpen}
+              onSidebarClose={() => setMobileSidebarOpen(false)}
+          />
           {/* ------------------------------------------- */}
-          {/* End Page */}
+          {/* Main Wrapper */}
           {/* ------------------------------------------- */}
-        </Container>
-        <Box sx={{pt:6, pb:3, display:'flex', justifyContent:'center'}}>
-            <Typography>
-              © 2025 All rights reserved by
-              <Link target="_blank" href="https://www.adminmart.com">
-                <span>
-                  AdminMart.com
-                </span>
-              </Link>
-              </Typography>
-              
-              <Typography>
-                .Distributed by
-              <Link target="_blank" href="https://themewagon.com">
-                <span>
-                  ThemeWagon
-                </span>
-              </Link>
-            </Typography>
-          </Box>
-      </PageWrapper>
-    </MainWrapper>
+          <PageWrapper className="page-wrapper">
+              {/* ------------------------------------------- */}
+              {/* Header */}
+              {/* ------------------------------------------- */}
+              <Header
+                  toggleSidebar={() => setSidebarOpen(!isSidebarOpen)}
+                  toggleMobileSidebar={() => setMobileSidebarOpen(true)}
+              />
+              {/* ------------------------------------------- */}
+              {/* PageContent */}
+              {/* ------------------------------------------- */}
+              <Container
+                  sx={{
+                      paddingTop: "20px",
+                      maxWidth: "1200px",
+                  }}
+              >
+                  {/* ------------------------------------------- */}
+                  {/* Page Route */}
+                  {/* ------------------------------------------- */}
+                  <Box sx={{ minHeight: "calc(100vh - 170px)" }}>
+                      <Outlet />
+                  </Box>
+
+                  {/* ------------------------------------------- */}
+                  {/* End Page */}
+                  {/* ------------------------------------------- */}
+              </Container>
+              <Box
+                  sx={{
+                      pt: 6,
+                      pb: 3,
+                      display: "flex",
+                      justifyContent: "center",
+                  }}
+              >
+                  <Typography variant="body2" color="textSecondary">
+                      © 2025 MTI UI. All rights reserved.
+                  </Typography>
+              </Box>
+          </PageWrapper>
+      </MainWrapper>
   );
 };
 

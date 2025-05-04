@@ -1,0 +1,20 @@
+[
+    {
+        "name": "Malik Syahputra",
+        "address": "RT 03 / RW 05, Jl. Melati No. 12",
+        "role": "Field Officer",
+        "size": 4,
+        "status": true,
+        "payment": true,
+        "bill": 0
+    },
+    {
+        "name": "Teddy Syahputra",
+        "address": "RT 04 / RW 02, Jl. Anggrek No. 8",
+        "role": "Administrator",
+        "size": 3,
+        "status": false,
+        "payment": false,
+        "bill": 100000
+    }
+]

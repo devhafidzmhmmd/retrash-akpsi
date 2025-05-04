@@ -1,0 +1,156 @@
+[
+    {
+        "name": "Rina Marlina",
+        "bill": 30000,
+        "paid": 30000,
+        "status": true,
+        "time": "2022-01-01T10:00:00Z"
+    },
+    {
+        "name": "Budi Hartono",
+        "bill": 30000,
+        "paid": 30000,
+        "status": true,
+        "time": "2022-01-01T10:00:00Z"
+    },
+    {
+        "name": "Siti Aminah",
+        "bill": 30000,
+        "paid": 30000,
+        "status": true,
+        "time": "2022-01-01T10:00:00Z"
+    },
+    {
+        "name": "Dedi Kurniawan",
+        "bill": 30000,
+        "paid": 30000,
+        "status": true,
+        "time": "2022-01-01T10:00:00Z"
+    },
+    {
+        "name": "Ahmad Rizki",
+        "bill": 30000,
+        "paid": 30000,
+        "status": true,
+        "time": "2022-01-01T10:00:00Z"
+    },
+    {
+        "name": "Maya Sari",
+        "bill": 30000,
+        "paid": 30000,
+        "status": true,
+        "time": "2022-01-01T10:00:00Z"
+    },
+    {
+        "name": "Rudi Santoso",
+        "bill": 30000,
+        "paid": 30000,
+        "status": true,
+        "time": "2022-01-01T10:00:00Z"
+    },
+    {
+        "name": "Nina Wati",
+        "bill": 30000,
+        "paid": 30000,
+        "status": true,
+        "time": "2022-01-01T10:00:00Z"
+    },
+    {
+        "name": "Hendra Wijaya",
+        "bill": 30000,
+        "paid": 30000,
+        "status": true,
+        "time": "2022-01-01T10:00:00Z"
+    },
+    {
+        "name": "Sri Wahyuni",
+        "bill": 30000,
+        "paid": 30000,
+        "status": true,
+        "time": "2022-01-01T10:00:00Z"
+    },
+    {
+        "name": "Agus Setiawan",
+        "bill": 30000,
+        "paid": 30000,
+        "status": true,
+        "time": "2022-01-01T10:00:00Z"
+    },
+    {
+        "name": "Dewi Lestari",
+        "bill": 30000,
+        "paid": 30000,
+        "status": true,
+        "time": "2022-01-01T10:00:00Z"
+    },
+    {
+        "name": "Bambang Kusuma",
+        "bill": 30000,
+        "paid": 30000,
+        "status": true,
+        "time": "2022-01-01T10:00:00Z"
+    },
+    {
+        "name": "Andi Saputra",
+        "bill": 30000,
+        "paid": 0,
+        "status": false,
+        "time": "2022-02-01T10:00:00Z"
+    },
+    {
+        "name": "Rina Marlina",
+        "bill": 30000,
+        "paid": 0,
+        "status": false,
+        "time": "2022-02-01T10:00:00Z"
+    },
+    {
+        "name": "Budi Hartono",
+        "bill": 30000,
+        "paid": 0,
+        "status": false,
+        "time": "2022-02-01T10:00:00Z"
+    },
+    {
+        "name": "Siti Aminah",
+        "bill": 30000,
+        "paid": 0,
+        "status": false,
+        "time": "2022-02-01T10:00:00Z"
+    },
+    {
+        "name": "Dedi Kurniawan",
+        "bill": 30000,
+        "paid": 0,
+        "status": false,
+        "time": "2022-02-01T10:00:00Z"
+    },
+    {
+        "name": "Ahmad Rizki",
+        "bill": 30000,
+        "paid": 0,
+        "status": false,
+        "time": "2022-02-01T10:00:00Z"
+    },
+    {
+        "name": "Maya Sari",
+        "bill": 30000,
+        "paid": 0,
+        "status": false,
+        "time": "2022-02-01T10:00:00Z"
+    },
+    {
+        "name": "Rudi Santoso",
+        "bill": 30000,
+        "paid": 0,
+        "status": false,
+        "time": "2022-02-01T10:00:00Z"
+    },
+    {
+        "name": "Nina Wati",
+        "bill": 30000,
+        "paid": 0,
+        "status": false,
+        "time": "2022-02-01T10:00:00Z"
+    }
+]
