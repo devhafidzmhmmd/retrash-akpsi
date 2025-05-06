@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import {
     Typography,
     Box,
@@ -10,8 +10,8 @@ import {
     Chip,
     TablePagination,
 } from "@mui/material";
-import transaction from "../../../dummy/transaction.json";
 import BlankCard from "../../../components/shared/BlankCard";
+import { getTransactionList } from "../../../api/transaction";
 
 const PaymentRecord = () => {
     const [page, setPage] = useState(0);
@@ -19,22 +19,33 @@ const PaymentRecord = () => {
     const [searchTerm, setSearchTerm] = useState("");
     const [selectedMonth, setSelectedMonth] = useState("");
     const [selectedYear, setSelectedYear] = useState("");
+    const [transaction, setTransaction] = useState([]);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            const data = await getTransactionList();
+            const enriched = data.map((item) => ({
+                ...item,
+                resident: item.resident || { name: "Tidak diketahui" },
+            }));
+            setTransaction(enriched);
+        };
+        fetchData();
+    }, []);
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
     };
 
     useEffect(() => {
-        setPage(0); // Reset page ketika filter berubah
+        setPage(0);
     }, [searchTerm, selectedMonth, selectedYear]);
 
-    const years = useMemo(() => {
-        return [
-            ...new Set(
-                transaction.map((item) => new Date(item.time).getFullYear())
-            ),
-        ].sort((a, b) => b - a);
-    }, []);
+    const years = [
+        ...new Set(
+            transaction.map((item) => new Date(item.createdAt).getFullYear())
+        ),
+    ].sort((a, b) => b - a);
 
     const months = [
         { value: "0", label: "Januari" },
@@ -51,28 +62,18 @@ const PaymentRecord = () => {
         { value: "11", label: "Desember" },
     ];
 
-    const filteredTransactions = useMemo(() => {
-        return transaction.filter((item) => {
-            const itemDate = new Date(item.time);
-            const matchesSearch = item.name
-                .toLowerCase()
-                .includes(searchTerm.toLowerCase());
-            const matchesYear =
-                !selectedYear ||
-                itemDate.getFullYear().toString() === selectedYear;
-            const matchesMonth =
-                !selectedMonth ||
-                itemDate.getMonth().toString() === selectedMonth;
-            return matchesSearch && matchesYear && matchesMonth;
-        });
-    }, [searchTerm, selectedYear, selectedMonth]);
+    const filteredData = transaction.filter((item) => {
+        const itemDate = new Date(item.createdAt);
+        const matchesSearch = item.resident?.name
+            ?.toLowerCase()
+            .includes(searchTerm.toLowerCase());
+        const matchesYear =
+            !selectedYear || itemDate.getFullYear().toString() === selectedYear;
+        const matchesMonth =
+            !selectedMonth || itemDate.getMonth().toString() === selectedMonth;
 
-    const paginatedTransactions = useMemo(() => {
-        return filteredTransactions.slice(
-            page * rowsPerPage,
-            page * rowsPerPage + rowsPerPage
-        );
-    }, [filteredTransactions, page, rowsPerPage]);
+        return matchesSearch && matchesYear && matchesMonth;
+    });
 
     return (
         <BlankCard>
@@ -91,9 +92,7 @@ const PaymentRecord = () => {
                         mb: 3,
                     }}
                 >
-                    <Typography variant="h5" component="div">
-                        Data Pembayaran
-                    </Typography>
+                    <Typography variant="h5">Data Pembayaran</Typography>
                     <Box sx={{ display: "flex", gap: 2 }}>
                         <select
                             value={selectedYear}
@@ -140,6 +139,7 @@ const PaymentRecord = () => {
                         />
                     </Box>
                 </Box>
+
                 <Table
                     aria-label="simple table"
                     sx={{ whiteSpace: "nowrap", mt: 2 }}
@@ -149,7 +149,6 @@ const PaymentRecord = () => {
                             <TableCell>
                                 <Typography
                                     variant="subtitle2"
-                                    component="span"
                                     fontWeight={600}
                                 >
                                     NAMA
@@ -158,7 +157,6 @@ const PaymentRecord = () => {
                             <TableCell>
                                 <Typography
                                     variant="subtitle2"
-                                    component="span"
                                     fontWeight={600}
                                 >
                                     TAGIHAN
@@ -167,7 +165,6 @@ const PaymentRecord = () => {
                             <TableCell>
                                 <Typography
                                     variant="subtitle2"
-                                    component="span"
                                     fontWeight={600}
                                 >
                                     STATUS
@@ -176,7 +173,6 @@ const PaymentRecord = () => {
                             <TableCell>
                                 <Typography
                                     variant="subtitle2"
-                                    component="span"
                                     fontWeight={600}
                                 >
                                     WAKTU
@@ -185,58 +181,62 @@ const PaymentRecord = () => {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {paginatedTransactions.map((item) => (
-                            <TableRow key={item.name + item.time}>
-                                <TableCell>
-                                    <Typography
-                                        sx={{
-                                            fontSize: "15px",
-                                            fontWeight: "500",
-                                        }}
-                                        component="div"
-                                    >
-                                        {item.name}
-                                    </Typography>
-                                </TableCell>
-                                <TableCell>
-                                    <Typography
-                                        sx={{ fontSize: "13px" }}
-                                        component="div"
-                                    >
-                                        Rp {item.bill.toLocaleString()}
-                                    </Typography>
-                                </TableCell>
-                                <TableCell>
-                                    <Chip
-                                        sx={{
-                                            px: "4px",
-                                            backgroundColor: item.status
-                                                ? "#00c292"
-                                                : "#fc4b6c",
-                                            color: "#fff",
-                                        }}
-                                        size="small"
-                                        label={
-                                            item.status
-                                                ? "Lunas"
-                                                : "Belum Lunas"
-                                        }
-                                    />
-                                </TableCell>
-                                <TableCell>
-                                    <Typography
-                                        sx={{ fontSize: "13px" }}
-                                        component="div"
-                                    >
-                                        {new Date(
-                                            item.time
-                                        ).toLocaleDateString()}
-                                    </Typography>
-                                </TableCell>
-                            </TableRow>
-                        ))}
+                        {filteredData
+                            .slice(
+                                page * rowsPerPage,
+                                page * rowsPerPage + rowsPerPage
+                            )
+                            .map((item) => (
+                                <TableRow key={item.id}>
+                                    <TableCell>
+                                        <Typography
+                                            fontSize="15px"
+                                            fontWeight="500"
+                                        >
+                                            {item.resident?.name ||
+                                                "Tidak diketahui"}
+                                        </Typography>
+                                    </TableCell>
+                                    <TableCell>
+                                        <Typography fontSize="13px">
+                                            Rp{" "}
+                                            {isNaN(Number(item.paidAmount))
+                                                ? "0"
+                                                : Number(
+                                                      item.paidAmount
+                                                  ).toLocaleString()}
+                                        </Typography>
+                                    </TableCell>
+                                    <TableCell>
+                                        <Chip
+                                            sx={{
+                                                px: "4px",
+                                                backgroundColor:
+                                                    item.status === "COMPLETED"
+                                                        ? "#00c292"
+                                                        : "#fc4b6c",
+                                                color: "#fff",
+                                            }}
+                                            size="small"
+                                            label={
+                                                item.status === "COMPLETED"
+                                                    ? "Lunas"
+                                                    : "Belum Lunas"
+                                            }
+                                        />
+                                    </TableCell>
+                                    <TableCell>
+                                        <Typography fontSize="13px">
+                                            {new Date(
+                                                item.createdAt
+                                            ).toLocaleDateString()}
+                                        </Typography>
+                                    </TableCell>
+                                </TableRow>
+                            ))}
                     </TableBody>
                 </Table>
+
                 <Box
                     sx={{
                         display: "flex",
@@ -244,13 +244,9 @@ const PaymentRecord = () => {
                         mt: 2,
                     }}
                 >
-                    <Typography variant="body2" component="div">
-                        Menampilkan {paginatedTransactions.length} dari{" "}
-                        {filteredTransactions.length} data
-                    </Typography>
                     <TablePagination
                         component="div"
-                        count={filteredTransactions.length}
+                        count={filteredData.length}
                         page={page}
                         onPageChange={handleChangePage}
                         rowsPerPage={rowsPerPage}

@@ -200,7 +200,7 @@ const BillsRecord = () => {
                                 page * rowsPerPage + rowsPerPage
                             )
                             .map((item) => (
-                                <TableRow key={item.name + item.time}>
+                                <TableRow key={item.id}>
                                     <TableCell>
                                         <Typography
                                             sx={{
@@ -241,7 +241,7 @@ const BillsRecord = () => {
                                         </Typography>
                                     </TableCell>
                                     <TableCell>
-                                        <Typography sx={{ fontSize: "13px" }}>
+                                        <Box sx={{ fontSize: "13px" }}>
                                             <Box
                                                 sx={{
                                                     display: "flex",
@@ -269,7 +269,7 @@ const BillsRecord = () => {
                                                     title="Edit data warga"
                                                 />
                                             </Box>
-                                        </Typography>
+                                        </Box>
                                     </TableCell>
                                 </TableRow>
                             ))}
