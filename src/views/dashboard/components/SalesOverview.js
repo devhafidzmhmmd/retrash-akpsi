@@ -89,20 +89,22 @@ const SalesOverview = () => {
     ];
 
     return (
-
-        <DashboardCard title="Cash Flow Overview" action={
-            <Select
-                labelId="month-dd"
-                id="month-dd"
-                value={month}
-                size="small"
-                onChange={handleChange}
-            >
-                <MenuItem value={1}>March 2023</MenuItem>
-                <MenuItem value={2}>April 2023</MenuItem>
-                <MenuItem value={3}>May 2023</MenuItem>
-            </Select>
-        }>
+        <DashboardCard
+            title="Grafik Pembayaran"
+            action={
+                <Select
+                    labelId="month-dd"
+                    id="month-dd"
+                    value={month}
+                    size="small"
+                    onChange={handleChange}
+                >
+                    <MenuItem value={1}>March 2023</MenuItem>
+                    <MenuItem value={2}>April 2023</MenuItem>
+                    <MenuItem value={3}>May 2023</MenuItem>
+                </Select>
+            }
+        >
             <Chart
                 options={optionscolumnchart}
                 series={seriescolumnchart}

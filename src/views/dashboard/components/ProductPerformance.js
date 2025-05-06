@@ -46,35 +46,46 @@ const products = [
 
 const ProductPerformance = () => {
     return (
-
-        <DashboardCard title="Resident Payment Status">
-            <Box sx={{ overflow: 'auto', width: { xs: '280px', sm: 'auto' } }}>
+        <DashboardCard title="Laporan Pembayaran">
+            <Box sx={{ overflow: "auto", width: { xs: "280px", sm: "auto" } }}>
                 <Table
                     aria-label="simple table"
                     sx={{
                         whiteSpace: "nowrap",
-                        mt: 2
+                        mt: 2,
                     }}
                 >
                     <TableHead>
                         <TableRow>
                             <TableCell>
-                                <Typography variant="subtitle2" fontWeight={600}>
+                                <Typography
+                                    variant="subtitle2"
+                                    fontWeight={600}
+                                >
                                     NAME
                                 </Typography>
                             </TableCell>
                             <TableCell>
-                                <Typography variant="subtitle2" fontWeight={600}>
+                                <Typography
+                                    variant="subtitle2"
+                                    fontWeight={600}
+                                >
                                     ADDRESS
                                 </Typography>
                             </TableCell>
                             <TableCell>
-                                <Typography variant="subtitle2" fontWeight={600}>
+                                <Typography
+                                    variant="subtitle2"
+                                    fontWeight={600}
+                                >
                                     BILL
                                 </Typography>
                             </TableCell>
                             <TableCell>
-                                <Typography variant="subtitle2" fontWeight={600}>
+                                <Typography
+                                    variant="subtitle2"
+                                    fontWeight={600}
+                                >
                                     STATUS
                                 </Typography>
                             </TableCell>
@@ -111,7 +122,10 @@ const ProductPerformance = () => {
                                     </Box>
                                 </TableCell>
                                 <TableCell>
-                                    <Typography variant="subtitle2" fontWeight={400}>
+                                    <Typography
+                                        variant="subtitle2"
+                                        fontWeight={400}
+                                    >
                                         {product.bill}
                                     </Typography>
                                 </TableCell>
@@ -119,7 +133,10 @@ const ProductPerformance = () => {
                                     <Chip
                                         sx={{
                                             px: "4px",
-                                            backgroundColor: product.status === 'Paid' ? '#00c292' : '#fc4b6c',
+                                            backgroundColor:
+                                                product.status === "Paid"
+                                                    ? "#00c292"
+                                                    : "#fc4b6c",
                                             color: "#fff",
                                         }}
                                         size="small"

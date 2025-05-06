@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
     Typography,
     Box,
@@ -16,38 +16,112 @@ import {
     DialogContent,
     TextField,
     DialogContentText,
+    Select,
+    MenuItem,
 } from "@mui/material";
 // import DashboardCard from "../../../components/shared/DashboardCard";
-import resident from "../../../dummy/users.json";
 import BlankCard from "../../../components/shared/BlankCard";
 import { IconEdit, IconTrash, IconUserPlus } from "@tabler/icons-react";
+import {
+    getOfficerList,
+    createOfficer,
+    updateOfficer,
+} from "../../../api/officer";
+import { useAlert } from "../../../components/shared/messenger";
 
 const UserRecord = () => {
-    const [page, setPage] = React.useState(0);
-    const [rowsPerPage] = React.useState(10);
-    const [searchTerm, setSearchTerm] = React.useState("");
-    const [openEditModal, setOpenEditModal] = React.useState(false);
-    const [openDeleteModal, setOpenDeleteModal] = React.useState(false);
-    const [selectedResident, setSelectedResident] = React.useState(null);
+    const [users, setUsers] = useState([]);
+    const [page, setPage] = useState(0);
+    const [rowsPerPage] = useState(10);
+    const [searchTerm, setSearchTerm] = useState("");
+    const [openEditModal, setOpenEditModal] = useState(false);
+    const [openDeleteModal, setOpenDeleteModal] = useState(false);
+    const [openAddModal, setOpenAddModal] = useState(false);
+    const [selectedResident, setSelectedResident] = useState(null);
+    const [formData, setFormData] = useState({
+        username: "",
+        type: "",
+        password: "",
+    });
+    const { showAlert } = useAlert();
 
-    const handleChangePage = (event, newPage) => {
-        setPage(newPage);
-    };
+    useEffect(() => {
+        const fetchData = async () => {
+            const data = await getOfficerList();
+            setUsers(data);
+        };
+        fetchData();
+    }, []);
 
-    const handleEditClick = (resident) => {
-        setSelectedResident(resident);
+    const handleChangePage = (event, newPage) => setPage(newPage);
+
+    const handleEditClick = (user) => {
+        setSelectedResident(user);
+        setFormData({
+            username: user.username || "",
+            type: user.type || "",
+        });
         setOpenEditModal(true);
     };
 
-    const handleDeleteClick = (resident) => {
-        setSelectedResident(resident);
+    const handleDeleteClick = (user) => {
+        setSelectedResident(user);
         setOpenDeleteModal(true);
     };
 
     const handleCloseModals = () => {
         setOpenEditModal(false);
         setOpenDeleteModal(false);
+        setOpenAddModal(false);
         setSelectedResident(null);
+        setFormData({ username: "", type: "", password: "" });
+    };
+
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData((prev) => ({
+            ...prev,
+            [name]: value,
+        }));
+    };
+
+    const handleCreatePetugas = async () => {
+        console.log("Creating:", formData);
+        if (!formData.username || !formData.password || !formData.type) {
+            showAlert("warning", "Silahkan isi semua field");
+            return;
+        }
+        const created = await createOfficer(
+            formData.username,
+            formData.password,
+            formData.type
+        );
+        if (created) {
+            showAlert("success", "Data berhasil ditambahkan");
+            setUsers((prev) => [...prev, created]);
+        } else {
+            showAlert("error", "Data gagal ditambahkan");
+        }
+        handleCloseModals();
+    };
+
+    const handleUpdatePetugas = async () => {
+        const updated = await updateOfficer(
+            selectedResident.id,
+            formData.username,
+            formData.password
+        );
+        if (updated) {
+            alert("Data berhasil diupdate");
+            setUsers((prev) =>
+                prev.map((user) =>
+                    user.id === selectedResident.id ? updated : user
+                )
+            );
+        } else {
+            alert("Data gagal diupdate");
+        }
+        handleCloseModals();
     };
 
     return (
@@ -90,6 +164,7 @@ const UserRecord = () => {
                             onClick={() => {
                                 setPage(0);
                                 setSearchTerm("");
+                                setOpenAddModal(true);
                             }}
                             startIcon={<IconUserPlus size={18} />}
                             title="Tambah data petugas baru"
@@ -112,7 +187,7 @@ const UserRecord = () => {
                                     variant="subtitle2"
                                     fontWeight={600}
                                 >
-                                    NAME
+                                    NAMA
                                 </Typography>
                             </TableCell>
                             <TableCell>
@@ -120,7 +195,7 @@ const UserRecord = () => {
                                     variant="subtitle2"
                                     fontWeight={600}
                                 >
-                                    ROLE
+                                    PERAN
                                 </Typography>
                             </TableCell>
                             <TableCell>
@@ -129,15 +204,15 @@ const UserRecord = () => {
                                     fontWeight={600}
                                     textAlign="center"
                                 >
-                                    ACTIONS
+                                    AKSI
                                 </Typography>
                             </TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {resident
+                        {users
                             .filter((product) =>
-                                product.name
+                                product.username
                                     .toLowerCase()
                                     .includes(
                                         searchTerm
@@ -150,7 +225,7 @@ const UserRecord = () => {
                                 page * rowsPerPage + rowsPerPage
                             )
                             .map((product) => (
-                                <TableRow key={product.name}>
+                                <TableRow key={product.username}>
                                     <TableCell>
                                         <Typography
                                             sx={{
@@ -158,7 +233,7 @@ const UserRecord = () => {
                                                 fontWeight: "500",
                                             }}
                                         >
-                                            {product.name}
+                                            {product.username}
                                         </Typography>
                                     </TableCell>
                                     <TableCell>
@@ -169,7 +244,7 @@ const UserRecord = () => {
                                                     fontSize: "13px",
                                                 }}
                                             >
-                                                {product.role}
+                                                {product.type}
                                             </Typography>
                                         </Box>
                                     </TableCell>
@@ -224,8 +299,8 @@ const UserRecord = () => {
                     <TablePagination
                         component="div"
                         count={
-                            resident.filter((product) =>
-                                product.name
+                            users.filter((product) =>
+                                product.username
                                     .toLowerCase()
                                     .includes(
                                         searchTerm
@@ -243,7 +318,7 @@ const UserRecord = () => {
 
                 {/* Edit Modal */}
                 <Dialog open={openEditModal} onClose={handleCloseModals}>
-                    <DialogTitle>Edit Data petugas</DialogTitle>
+                    <DialogTitle>Ubah Data petugas</DialogTitle>
                     <DialogContent>
                         <TextField
                             autoFocus
@@ -251,39 +326,103 @@ const UserRecord = () => {
                             label="Nama"
                             fullWidth
                             variant="outlined"
-                            defaultValue={selectedResident?.name}
+                            name="username"
+                            value={formData.username}
+                            onChange={handleChange}
                         />
-                        <TextField
+                        <Select
                             margin="dense"
-                            label="Alamat"
                             fullWidth
                             variant="outlined"
-                            defaultValue={selectedResident?.address}
-                        />
+                            name="type"
+                            value={formData.type}
+                            onChange={handleChange}
+                        >
+                            <MenuItem value="ADMINISTRATOR">
+                                ADMINISTRATOR
+                            </MenuItem>
+                            <MenuItem value="FIELD_OFFICER">
+                                FIELD_OFFICER
+                            </MenuItem>
+                        </Select>
                     </DialogContent>
                     <DialogActions>
                         <Button onClick={handleCloseModals}>Batal</Button>
-                        <Button onClick={handleCloseModals} variant="contained">
+                        <Button
+                            onClick={handleUpdatePetugas}
+                            variant="contained"
+                        >
                             Simpan
                         </Button>
                     </DialogActions>
                 </Dialog>
 
-                {/* Delete Confirmation Modal */}
+                {/* Add Modal */}
+                <Dialog open={openAddModal} onClose={handleCloseModals}>
+                    <DialogTitle>Tambah Data petugas</DialogTitle>
+                    <DialogContent>
+                        <TextField
+                            autoFocus
+                            margin="dense"
+                            label="Nama"
+                            fullWidth
+                            variant="outlined"
+                            name="username"
+                            value={formData.username}
+                            onChange={handleChange}
+                        />
+                        <TextField
+                            margin="dense"
+                            label="Password"
+                            fullWidth
+                            variant="outlined"
+                            name="password"
+                            value={formData.password}
+                            onChange={handleChange}
+                        />
+                        <Select
+                            margin="dense"
+                            label="Type"
+                            fullWidth
+                            variant="outlined"
+                            name="type"
+                            value={formData.type}
+                            onChange={handleChange}
+                        >
+                            <MenuItem value="ADMINISTRATOR">
+                                ADMINISTRATOR
+                            </MenuItem>
+                            <MenuItem value="FIELD_OFFICER">
+                                FIELD_OFFICER
+                            </MenuItem>
+                        </Select>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={handleCloseModals}>Batal</Button>
+                        <Button
+                            onClick={handleCreatePetugas}
+                            variant="contained"
+                        >
+                            Simpan
+                        </Button>
+                    </DialogActions>
+                </Dialog>
+
+                {/* Delete Modal */}
                 <Dialog open={openDeleteModal} onClose={handleCloseModals}>
                     <DialogTitle>Konfirmasi Hapus</DialogTitle>
                     <DialogContent>
                         <DialogContentText>
                             Apakah Anda yakin ingin menghapus data petugas{" "}
-                            {selectedResident?.name}?
+                            <strong>{selectedResident?.username}</strong>?
                         </DialogContentText>
                     </DialogContent>
                     <DialogActions>
                         <Button onClick={handleCloseModals}>Batal</Button>
                         <Button
-                            onClick={handleCloseModals}
                             color="error"
                             variant="contained"
+                            onClick={handleCloseModals}
                         >
                             Hapus
                         </Button>

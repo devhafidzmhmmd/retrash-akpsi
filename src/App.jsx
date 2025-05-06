@@ -8,6 +8,7 @@ import { useRoutes } from 'react-router-dom';
 import Router from './routes/Router';
 
 import { baselightTheme } from "./theme/DefaultColors";
+import { AlertProvider } from './components/shared/messenger';
 
 function App() {
   
@@ -17,7 +18,9 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      {routing}
+      <AlertProvider>
+        {routing}
+      </AlertProvider>
     </ThemeProvider>
   );
 }

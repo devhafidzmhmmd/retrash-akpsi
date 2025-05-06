@@ -17,25 +17,40 @@ import {
     TextField,
     DialogContentText,
 } from "@mui/material";
-// import DashboardCard from "../../../components/shared/DashboardCard";
-import resident from "../../../dummy/resident.json";
 import BlankCard from "../../../components/shared/BlankCard";
 import { IconEdit, IconTrash, IconUserPlus } from "@tabler/icons-react";
+import { createResident, getResidentList } from "../../../api/resident";
+import { useAlert } from "../../../components/shared/messenger";
 
 const ResidentRecord = () => {
+    const [residents, setResidents] = React.useState([]);
     const [page, setPage] = React.useState(0);
     const [rowsPerPage] = React.useState(10);
     const [searchTerm, setSearchTerm] = React.useState("");
     const [openEditModal, setOpenEditModal] = React.useState(false);
     const [openDeleteModal, setOpenDeleteModal] = React.useState(false);
+    const [openAddModal, setOpenAddModal] = React.useState(false);
     const [selectedResident, setSelectedResident] = React.useState(null);
+    const [newResident, setNewResident] = React.useState({
+        name: "",
+        phoneNumber: "",
+    });
+    const { showAlert } = useAlert();
+
+    React.useEffect(() => {
+        const fetchData = async () => {
+            const data = await getResidentList();
+            setResidents(data);
+        };
+        fetchData();
+    }, []);
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
     };
 
     const handleEditClick = (resident) => {
-        setSelectedResident(resident);
+        setSelectedResident({ ...resident });
         setOpenEditModal(true);
     };
 
@@ -47,8 +62,52 @@ const ResidentRecord = () => {
     const handleCloseModals = () => {
         setOpenEditModal(false);
         setOpenDeleteModal(false);
+        setOpenAddModal(false);
         setSelectedResident(null);
     };
+
+    const handleAddClick = () => {
+        setNewResident({ name: "", phoneNumber: "" });
+        setOpenAddModal(true);
+    };
+
+    const handleAddResident = async () => {
+        if (!newResident.name || !newResident.phoneNumber) {
+            showAlert?.("warning", "Nama dan nomor telepon wajib diisi.");
+            return;
+        }
+
+        const created = await createResident(
+            newResident.name,
+            newResident.phoneNumber
+        );
+        if (created) {
+            const updated = [...residents, newResident];
+            setResidents(updated);
+            showAlert?.("success", "Data warga berhasil ditambahkan.");
+            setOpenAddModal(false);
+        }
+    };
+
+    const handleUpdateResident = () => {
+        const updated = residents.map((res) =>
+            res === selectedResident.original ? selectedResident : res
+        );
+        setResidents(updated);
+        showAlert?.("success", "Data warga berhasil diubah.");
+        handleCloseModals();
+    };
+
+    const handleDeleteResident = () => {
+        const updated = residents.filter((res) => res !== selectedResident);
+        setResidents(updated);
+        showAlert?.("success", "Data warga berhasil dihapus.");
+        handleCloseModals();
+    };
+
+    const filteredResidents = residents.filter((res) =>
+        res.name.toLowerCase().includes(searchTerm.toLowerCase())
+    );
 
     return (
         <BlankCard>
@@ -87,10 +146,7 @@ const ResidentRecord = () => {
                             variant="contained"
                             size="small"
                             sx={{ ml: 2 }}
-                            onClick={() => {
-                                setPage(0);
-                                setSearchTerm("");
-                            }}
+                            onClick={handleAddClick}
                             startIcon={<IconUserPlus size={18} />}
                             title="Tambah data warga baru"
                         >
@@ -98,59 +154,33 @@ const ResidentRecord = () => {
                         </Button>
                     </Box>
                 </Box>
-                <Table
-                    aria-label="simple table"
-                    sx={{
-                        whiteSpace: "nowrap",
-                        mt: 2,
-                    }}
-                >
+
+                <Table sx={{ whiteSpace: "nowrap", mt: 2 }}>
                     <TableHead>
                         <TableRow>
                             <TableCell>
-                                <Typography
-                                    variant="subtitle2"
-                                    fontWeight={600}
-                                >
-                                    NAME
+                                <Typography fontWeight={600}>NAMA</Typography>
+                            </TableCell>
+                            <TableCell>
+                                <Typography fontWeight={600}>
+                                    NOMOR TELEPON
                                 </Typography>
                             </TableCell>
                             <TableCell>
-                                <Typography
-                                    variant="subtitle2"
-                                    fontWeight={600}
-                                >
-                                    ADDRESS
-                                </Typography>
-                            </TableCell>
-                            <TableCell>
-                                <Typography
-                                    variant="subtitle2"
-                                    fontWeight={600}
-                                    textAlign="center"
-                                >
-                                    ACTIONS
+                                <Typography fontWeight={600} textAlign="center">
+                                    AKSI
                                 </Typography>
                             </TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {resident
-                            .filter((product) =>
-                                product.name
-                                    .toLowerCase()
-                                    .includes(
-                                        searchTerm
-                                            ? searchTerm.toLowerCase()
-                                            : ""
-                                    )
-                            )
+                        {filteredResidents
                             .slice(
                                 page * rowsPerPage,
                                 page * rowsPerPage + rowsPerPage
                             )
-                            .map((product) => (
-                                <TableRow key={product.name}>
+                            .map((resident, index) => (
+                                <TableRow key={index}>
                                     <TableCell>
                                         <Typography
                                             sx={{
@@ -158,27 +188,22 @@ const ResidentRecord = () => {
                                                 fontWeight: "500",
                                             }}
                                         >
-                                            {product.name}
+                                            {resident.name}
                                         </Typography>
                                     </TableCell>
                                     <TableCell>
-                                        <Box>
-                                            <Typography
-                                                color="textSecondary"
-                                                sx={{
-                                                    fontSize: "13px",
-                                                }}
-                                            >
-                                                {product.address}
-                                            </Typography>
-                                        </Box>
+                                        <Typography
+                                            color="textSecondary"
+                                            sx={{ fontSize: "13px" }}
+                                        >
+                                            {resident.phoneNumber}
+                                        </Typography>
                                     </TableCell>
                                     <TableCell>
                                         <Box
                                             sx={{
                                                 display: "flex",
                                                 gap: 1,
-                                                alignItems: "center",
                                                 justifyContent: "center",
                                             }}
                                         >
@@ -191,11 +216,13 @@ const ResidentRecord = () => {
                                                 }}
                                                 size="small"
                                                 icon={<IconEdit size={14} />}
-                                                label="Edit"
+                                                label="Ubah"
                                                 onClick={() =>
-                                                    handleEditClick(product)
+                                                    handleEditClick({
+                                                        ...resident,
+                                                        original: resident,
+                                                    })
                                                 }
-                                                title="Edit data warga"
                                             />
                                             <Chip
                                                 sx={{
@@ -208,9 +235,8 @@ const ResidentRecord = () => {
                                                 icon={<IconTrash size={14} />}
                                                 label="Hapus"
                                                 onClick={() =>
-                                                    handleDeleteClick(product)
+                                                    handleDeleteClick(resident)
                                                 }
-                                                title="Hapus data warga"
                                             />
                                         </Box>
                                     </TableCell>
@@ -218,22 +244,13 @@ const ResidentRecord = () => {
                             ))}
                     </TableBody>
                 </Table>
+
                 <Box
                     sx={{ display: "flex", justifyContent: "flex-end", mt: 2 }}
                 >
                     <TablePagination
                         component="div"
-                        count={
-                            resident.filter((product) =>
-                                product.name
-                                    .toLowerCase()
-                                    .includes(
-                                        searchTerm
-                                            ? searchTerm.toLowerCase()
-                                            : ""
-                                    )
-                            ).length
-                        }
+                        count={filteredResidents.length}
                         page={page}
                         onPageChange={handleChangePage}
                         rowsPerPage={rowsPerPage}
@@ -243,7 +260,7 @@ const ResidentRecord = () => {
 
                 {/* Edit Modal */}
                 <Dialog open={openEditModal} onClose={handleCloseModals}>
-                    <DialogTitle>Edit Data Warga</DialogTitle>
+                    <DialogTitle>Ubah Data Warga</DialogTitle>
                     <DialogContent>
                         <TextField
                             autoFocus
@@ -251,37 +268,92 @@ const ResidentRecord = () => {
                             label="Nama"
                             fullWidth
                             variant="outlined"
-                            defaultValue={selectedResident?.name}
+                            value={selectedResident?.name || ""}
+                            onChange={(e) =>
+                                setSelectedResident((prev) => ({
+                                    ...prev,
+                                    name: e.target.value,
+                                }))
+                            }
                         />
                         <TextField
                             margin="dense"
-                            label="Alamat"
+                            label="Nomor Telepon"
                             fullWidth
                             variant="outlined"
-                            defaultValue={selectedResident?.address}
+                            value={selectedResident?.phoneNumber || ""}
+                            onChange={(e) =>
+                                setSelectedResident((prev) => ({
+                                    ...prev,
+                                    phoneNumber: e.target.value,
+                                }))
+                            }
                         />
                     </DialogContent>
                     <DialogActions>
                         <Button onClick={handleCloseModals}>Batal</Button>
-                        <Button onClick={handleCloseModals} variant="contained">
+                        <Button
+                            onClick={handleUpdateResident}
+                            variant="contained"
+                        >
                             Simpan
                         </Button>
                     </DialogActions>
                 </Dialog>
 
-                {/* Delete Confirmation Modal */}
+                {/* Add Modal */}
+                <Dialog open={openAddModal} onClose={handleCloseModals}>
+                    <DialogTitle>Tambah Warga Baru</DialogTitle>
+                    <DialogContent>
+                        <TextField
+                            autoFocus
+                            margin="dense"
+                            label="Nama"
+                            fullWidth
+                            variant="outlined"
+                            value={newResident.name}
+                            onChange={(e) =>
+                                setNewResident({
+                                    ...newResident,
+                                    name: e.target.value,
+                                })
+                            }
+                        />
+                        <TextField
+                            margin="dense"
+                            label="Nomor Telepon"
+                            fullWidth
+                            variant="outlined"
+                            value={newResident.phoneNumber}
+                            onChange={(e) =>
+                                setNewResident({
+                                    ...newResident,
+                                    phoneNumber: e.target.value,
+                                })
+                            }
+                        />
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={handleCloseModals}>Batal</Button>
+                        <Button onClick={handleAddResident} variant="contained">
+                            Simpan
+                        </Button>
+                    </DialogActions>
+                </Dialog>
+
+                {/* Delete Modal */}
                 <Dialog open={openDeleteModal} onClose={handleCloseModals}>
                     <DialogTitle>Konfirmasi Hapus</DialogTitle>
                     <DialogContent>
                         <DialogContentText>
                             Apakah Anda yakin ingin menghapus data warga{" "}
-                            {selectedResident?.name}?
+                            <strong>{selectedResident?.name}</strong>?
                         </DialogContentText>
                     </DialogContent>
                     <DialogActions>
                         <Button onClick={handleCloseModals}>Batal</Button>
                         <Button
-                            onClick={handleCloseModals}
+                            onClick={handleDeleteResident}
                             color="error"
                             variant="contained"
                         >

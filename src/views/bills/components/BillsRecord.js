@@ -11,9 +11,10 @@ import {
     TablePagination,
 } from "@mui/material";
 // import DashboardCard from "../../../components/shared/DashboardCard";
-import transaction from "../../../dummy/transaction.json";
+// import transaction from "../../../dummy/transaction.json";
 import BlankCard from "../../../components/shared/BlankCard";
 import { IconEdit } from "@tabler/icons-react";
+import { getInvoiceList } from "../../../api/invoice";
 
 const BillsRecord = () => {
     const [page, setPage] = React.useState(0);
@@ -21,6 +22,15 @@ const BillsRecord = () => {
     const [searchTerm, setSearchTerm] = React.useState("");
     const [selectedMonth, setSelectedMonth] = React.useState("");
     const [selectedYear, setSelectedYear] = React.useState("");
+    const [transaction, setTransaction] = React.useState([]);
+
+    React.useEffect(() => {
+        const fetchData = async () => {
+            const data = await getInvoiceList();
+            setTransaction(data);
+        };
+        fetchData();
+    }, []);
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
@@ -28,7 +38,7 @@ const BillsRecord = () => {
 
     const years = [
         ...new Set(
-            transaction.map((item) => new Date(item.time).getFullYear())
+            transaction.map((item) => new Date(item.invoiceDate).getFullYear())
         ),
     ].sort((a, b) => b - a);
 
@@ -169,8 +179,8 @@ const BillsRecord = () => {
                     <TableBody>
                         {transaction
                             .filter((item) => {
-                                const itemDate = new Date(item.time);
-                                const matchesSearch = item.name
+                                const itemDate = new Date(item.invoiceDate);
+                                const matchesSearch = item.resident.name
                                     .toLowerCase()
                                     .includes(searchTerm.toLowerCase());
                                 const matchesYear =
@@ -198,12 +208,12 @@ const BillsRecord = () => {
                                                 fontWeight: "500",
                                             }}
                                         >
-                                            {item.name}
+                                            {item.resident.name}
                                         </Typography>
                                     </TableCell>
                                     <TableCell>
                                         <Typography sx={{ fontSize: "13px" }}>
-                                            Rp {item.bill.toLocaleString()}
+                                            Rp {item.amount.toLocaleString()}
                                         </Typography>
                                     </TableCell>
                                     {/* <TableCell>
@@ -226,7 +236,7 @@ const BillsRecord = () => {
                                     <TableCell>
                                         <Typography sx={{ fontSize: "13px" }}>
                                             {new Date(
-                                                item.time
+                                                item.invoiceDate
                                             ).toLocaleDateString()}
                                         </Typography>
                                     </TableCell>
@@ -273,7 +283,7 @@ const BillsRecord = () => {
                         count={
                             transaction.filter((item) => {
                                 const itemDate = new Date(item.time);
-                                const matchesSearch = item.name
+                                const matchesSearch = item.resident.name
                                     .toLowerCase()
                                     .includes(searchTerm.toLowerCase());
                                 const matchesYear =

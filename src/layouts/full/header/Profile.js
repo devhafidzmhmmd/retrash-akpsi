@@ -1,23 +1,26 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import {
-  Avatar,
-  Box,
-  Menu,
-  Button,
-  IconButton,
-  MenuItem,
-  ListItemIcon,
-  ListItemText
-} from '@mui/material';
+    Avatar,
+    Box,
+    Menu,
+    Button,
+    IconButton,
+    MenuItem,
+    ListItemIcon,
+    ListItemText,
+    Typography,
+} from "@mui/material";
 
-import { IconListCheck, IconMail, IconUser } from '@tabler/icons-react';
+import { IconListCheck, IconMail, IconUser } from "@tabler/icons-react";
 
-import ProfileImg from 'src/assets/images/profile/user-1.jpg';
+import ProfileImg from "src/assets/images/profile/user-1.jpg";
 import { useNavigate } from "react-router-dom";
 import { removeToken } from "src/utils/auth";
+import { useUser } from "src/context/AppUser";
 
 const Profile = () => {
+    const { user } = useUser();
     const [anchorEl2, setAnchorEl2] = useState(null);
     const handleClick2 = (event) => {
         setAnchorEl2(event.currentTarget);
@@ -35,19 +38,30 @@ const Profile = () => {
 
     return (
         <Box>
-            <IconButton
+            <Box
+                display="flex"
+                alignItems="center"
                 size="large"
                 aria-label="show 11 new notifications"
                 color="inherit"
                 aria-controls="msgs-menu"
                 aria-haspopup="true"
                 sx={{
+                    cursor: "pointer", // Added to change mouse pointer on hover
                     ...(typeof anchorEl2 === "object" && {
                         color: "primary.main",
                     }),
                 }}
                 onClick={handleClick2}
             >
+                <Box textAlign={"right"}>
+                    <Typography variant="body1" fontWeight={500} mr={2}>
+                        {user?.username ? user.username.toUpperCase() : "USER"}
+                    </Typography>
+                    <Typography variant="body2" color="textSecondary" mr={2}>
+                        {user?.type ? user.type : "Unknown Role"}
+                    </Typography>
+                </Box>
                 <Avatar
                     src={ProfileImg}
                     alt={ProfileImg}
@@ -56,7 +70,7 @@ const Profile = () => {
                         height: 35,
                     }}
                 />
-            </IconButton>
+            </Box>
             {/* ------------------------------------------- */}
             {/* Message Dropdown */}
             {/* ------------------------------------------- */}

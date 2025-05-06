@@ -1,12 +1,34 @@
 import axios from "axios";
-
-const API_URL = "https://api.wizz.biz.id/v1";
+import { AUTH } from "./endpoints";
 
 export const login = async (username, password) => {
     try {
-        const response = await axios.post(`${API_URL}/auth/login`, {
-            username,
-            password,
+        const response = await axios({
+            method: AUTH.LOGIN.METHOD,
+            url: AUTH.LOGIN.URL,
+            data: {
+                username,
+                password,
+            },
+        });
+        if (response.status === 200) {
+            return response.data;
+        } else {
+            return false;
+        }
+    } catch (error) {
+        return false;
+    }
+};
+
+export const me = async (token) => {
+    try {
+        const response = await axios({
+            method: AUTH.ME.METHOD,
+            url: AUTH.ME.URL,
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
         });
         if (response.status === 200) {
             return response.data;

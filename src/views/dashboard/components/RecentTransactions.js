@@ -42,7 +42,7 @@ const RecentTransactions = () => {
     ];
 
     return (
-        <DashboardCard title="Recent Transactions">
+        <DashboardCard title="Riwayat Transaksi">
             <div style={{ maxHeight: "400px", overflowY: "auto" }}>
                 <Timeline
                     className="theme-timeline"
