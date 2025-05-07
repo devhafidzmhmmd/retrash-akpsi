@@ -106,10 +106,11 @@ const UserRecord = () => {
     };
 
     const handleUpdatePetugas = async () => {
+        console.log(formData);
         const updated = await updateOfficer(
             selectedResident.id,
             formData.username,
-            formData.password
+            formData.type
         );
         if (updated) {
             alert("Data berhasil diupdate");

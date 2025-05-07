@@ -58,7 +58,7 @@ export const createOfficer = async (username, password, type) => {
     }
 };
 
-export const updateOfficer = async (id, username, password) => {
+export const updateOfficer = async (id, username, type) => {
     try {
         const response = await axios({
             method: OFFICER.UPDATE.METHOD,
@@ -66,7 +66,7 @@ export const updateOfficer = async (id, username, password) => {
             data: {
                 id,
                 username,
-                password,
+                type,
             },
             headers: {
                 Authorization: `Bearer ${getToken()}`,

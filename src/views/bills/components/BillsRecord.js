@@ -13,7 +13,7 @@ import {
 // import DashboardCard from "../../../components/shared/DashboardCard";
 // import transaction from "../../../dummy/transaction.json";
 import BlankCard from "../../../components/shared/BlankCard";
-import { IconEdit } from "@tabler/icons-react";
+import { IconEdit, IconSend } from "@tabler/icons-react";
 import { getInvoiceList } from "../../../api/invoice";
 
 const BillsRecord = () => {
@@ -74,7 +74,7 @@ const BillsRecord = () => {
                         mb: 3,
                     }}
                 >
-                    <Typography variant="h5">Data Pembayaran</Typography>
+                    <Typography variant="h5">Info Tagihan</Typography>
                     <Box sx={{ display: "flex", gap: 2 }}>
                         <select
                             value={selectedYear}
@@ -254,7 +254,7 @@ const BillsRecord = () => {
                                                     sx={{
                                                         px: "4px",
                                                         backgroundColor:
-                                                            "#fc4b6c",
+                                                            "#00c292",
                                                         color: "#fff",
                                                         cursor: "pointer",
                                                     }}
@@ -262,11 +262,29 @@ const BillsRecord = () => {
                                                     icon={
                                                         <IconEdit size={14} />
                                                     }
-                                                    label="Edit"
+                                                    label="Ubah"
                                                     // onClick={() =>
                                                     //     handleEditClick(product)
                                                     // }
                                                     title="Edit data warga"
+                                                />
+                                                <Chip
+                                                    sx={{
+                                                        px: "4px",
+                                                        backgroundColor:
+                                                            "#0288D1",
+                                                        color: "#fff",
+                                                        cursor: "pointer",
+                                                    }}
+                                                    size="small"
+                                                    icon={
+                                                        <IconSend size={14} />
+                                                    }
+                                                    label="Kirim"
+                                                    // onClick={() =>
+                                                    //     handleEditClick(product)
+                                                    // }
+                                                    title="Kirim tagihan"
                                                 />
                                             </Box>
                                         </Box>

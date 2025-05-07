@@ -88,7 +88,7 @@ const Profile = () => {
                     },
                 }}
             >
-                <MenuItem>
+                {/* <MenuItem>
                     <ListItemIcon>
                         <IconUser width={20} />
                     </ListItemIcon>
@@ -105,7 +105,7 @@ const Profile = () => {
                         <IconListCheck width={20} />
                     </ListItemIcon>
                     <ListItemText>My Tasks</ListItemText>
-                </MenuItem>
+                </MenuItem> */}
                 <Box mt={1} py={1} px={2}>
                     <Button
                         variant="outlined"

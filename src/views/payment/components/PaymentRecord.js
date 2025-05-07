@@ -92,7 +92,7 @@ const PaymentRecord = () => {
                         mb: 3,
                     }}
                 >
-                    <Typography variant="h5">Data Pembayaran</Typography>
+                    <Typography variant="h5">Laporan Pembayaran</Typography>
                     <Box sx={{ display: "flex", gap: 2 }}>
                         <select
                             value={selectedYear}
