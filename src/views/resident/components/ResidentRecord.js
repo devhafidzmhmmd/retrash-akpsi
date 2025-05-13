@@ -19,7 +19,7 @@ import {
 } from "@mui/material";
 import BlankCard from "../../../components/shared/BlankCard";
 import { IconEdit, IconTrash, IconUserPlus } from "@tabler/icons-react";
-import { createResident, getResidentList } from "../../../api/resident";
+import { createResident, getResidentList, updateResident } from "../../../api/resident";
 import { useAlert } from "../../../components/shared/messenger";
 
 const ResidentRecord = () => {
@@ -89,16 +89,25 @@ const ResidentRecord = () => {
         }
     };
 
-    const handleUpdateResident = () => {
-        const updated = residents.map((res) =>
-            res === selectedResident.original ? selectedResident : res
+    const handleUpdateResident = async () => {
+        await updateResident({
+            id: selectedResident.id,
+            name: selectedResident.name,
+            phoneNumber: selectedResident.phoneNumber,
+        })
+        const updated = residents.map((res) => 
+             res === selectedResident.original ? selectedResident : res
         );
         setResidents(updated);
         showAlert?.("success", "Data warga berhasil diubah.");
         handleCloseModals();
     };
 
-    const handleDeleteResident = () => {
+    const handleDeleteResident = async () => {
+        await updateResident({
+            id: selectedResident.id,
+            isDelete: true,
+        });
         const updated = residents.filter((res) => res !== selectedResident);
         setResidents(updated);
         showAlert?.("success", "Data warga berhasil dihapus.");

@@ -55,3 +55,30 @@ export const createResident = async (name, phoneNumber) => {
         return false;
     }
 };
+
+export const updateResident = async ({id, name, phoneNumber, isDelete}) => {
+    try {
+        const response = await axios({
+            method: RESIDENT.UPDATE.METHOD,
+            url: RESIDENT.UPDATE.URL + id,
+            data: {
+                name,
+                phoneNumber,
+                isDelete
+            },
+            headers: {
+                Authorization: `Bearer ${getToken()}`,
+            },
+        });
+        if (response.status === 200) {
+            return response.data;
+        } else {
+            return false;
+        }
+    } catch (error) {
+        if (error.response.status === 403) {
+            removeToken();
+        }
+        return false;
+    }
+};

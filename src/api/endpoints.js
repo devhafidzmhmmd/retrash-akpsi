@@ -1,4 +1,5 @@
-const BASE_URL = "https://api.wizz.biz.id/v1";
+// const BASE_URL = "https://api.wizz.biz.id/v1";
+const BASE_URL = "http://localhost:8080/v1";
 
 const AUTH = {
     LOGIN: {
@@ -40,6 +41,10 @@ const RESIDENT = {
     CREATE: {
         URL: `${BASE_URL}/residents`,
         METHOD: "POST",
+    },
+    UPDATE: {
+        URL: `${BASE_URL}/residents/`,
+        METHOD: "PATCH",
     },
 };
 
