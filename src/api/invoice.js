@@ -54,3 +54,25 @@ export const updateInvoiceStatus = async (id, status) => {
         return false;
     }
 };
+
+export const resendInvoice = async (id) => {
+    try {
+        const response = await axios({
+            method: INVOICE.RESEND.METHOD,
+            url: INVOICE.RESEND.URL(id),
+            headers: {
+                Authorization: `Bearer ${getToken()}`,
+            },
+        });
+        if (response.status === 200) {
+            return response.data;
+        } else {
+            return false;
+        }
+    } catch (error) {
+        if (error.response.status === 403) {
+            removeToken();
+        }
+        return false;
+    }
+};

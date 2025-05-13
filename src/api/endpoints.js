@@ -64,6 +64,10 @@ const INVOICE = {
         URL: `${BASE_URL}/invoices/`,
         METHOD: "PATCH",
     },
+    RESEND: {
+        URL: (id) => `${BASE_URL}/invoices/${id}/resend`,
+        METHOD: "POST",
+    },
 };
 
 export { AUTH, OFFICER, ISSUE, RESIDENT, TRANSACTION, INVOICE };
