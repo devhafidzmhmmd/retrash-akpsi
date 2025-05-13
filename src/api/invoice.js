@@ -33,8 +33,8 @@ export const getInvoiceList = async (filter, sort) => {
 export const updateInvoiceStatus = async (id, status) => {
     try {
         const response = await axios({
-            method: INVOICE.LIST.METHOD,
-            url: INVOICE.LIST.URL + id,
+            method: INVOICE.UPDATE.METHOD,
+            url: INVOICE.UPDATE.URL + id,
             data: {
                 status
             },
