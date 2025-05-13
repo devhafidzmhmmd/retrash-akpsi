@@ -14,7 +14,11 @@ import {
 // import transaction from "../../../dummy/transaction.json";
 import BlankCard from "../../../components/shared/BlankCard";
 import { IconEdit, IconSend } from "@tabler/icons-react";
-import { getInvoiceList } from "../../../api/invoice";
+import {
+    getInvoiceList,
+    updateInvoiceStatus,
+    resendInvoice,
+} from "../../../api/invoice";
 
 const BillsRecord = () => {
     const [page, setPage] = React.useState(0);
@@ -24,11 +28,12 @@ const BillsRecord = () => {
     const [selectedYear, setSelectedYear] = React.useState("");
     const [transaction, setTransaction] = React.useState([]);
 
+    const fetchData = async () => {
+        const data = await getInvoiceList();
+        setTransaction(data);
+    };
+
     React.useEffect(() => {
-        const fetchData = async () => {
-            const data = await getInvoiceList();
-            setTransaction(data);
-        };
         fetchData();
     }, []);
 
@@ -56,6 +61,20 @@ const BillsRecord = () => {
         { value: "10", label: "November" },
         { value: "11", label: "Desember" },
     ];
+
+    const handleKirim = async (item) => {
+        const result = await resendInvoice(item.id);
+        if (result) {
+            fetchData();
+        }
+    };
+
+    const handeUbahStatus = async (item) => {
+        const result = await updateInvoiceStatus(item.id, "PAID");
+        if (result) {
+            fetchData();
+        }
+    };
 
     return (
         <BlankCard>
@@ -235,9 +254,13 @@ const BillsRecord = () => {
                                     </TableCell> */}
                                     <TableCell>
                                         <Typography sx={{ fontSize: "13px" }}>
-                                            {new Date(
-                                                item.invoiceDate
-                                            ).toLocaleDateString()}
+                                            {new Date(item.invoiceDate)
+                                                .toLocaleDateString("id-ID", {
+                                                    day: "2-digit",
+                                                    month: "long",
+                                                    year: "numeric",
+                                                })
+                                                .toUpperCase()}
                                         </Typography>
                                     </TableCell>
                                     <TableCell>
@@ -263,9 +286,9 @@ const BillsRecord = () => {
                                                         <IconEdit size={14} />
                                                     }
                                                     label="Ubah"
-                                                    // onClick={() =>
-                                                    //     handleEditClick(product)
-                                                    // }
+                                                    onClick={() =>
+                                                        handeUbahStatus(item)
+                                                    }
                                                     title="Edit data warga"
                                                 />
                                                 <Chip
@@ -281,9 +304,9 @@ const BillsRecord = () => {
                                                         <IconSend size={14} />
                                                     }
                                                     label="Kirim"
-                                                    // onClick={() =>
-                                                    //     handleEditClick(product)
-                                                    // }
+                                                    onClick={() =>
+                                                        handleKirim(item)
+                                                    }
                                                     title="Kirim tagihan"
                                                 />
                                             </Box>

@@ -33,7 +33,7 @@ const ResidentRecord = () => {
     const [selectedResident, setSelectedResident] = React.useState(null);
     const [newResident, setNewResident] = React.useState({
         name: "",
-        phoneNumber: "",
+        phoneNumber: "+62",
     });
     const { showAlert } = useAlert();
 
@@ -50,7 +50,15 @@ const ResidentRecord = () => {
     };
 
     const handleEditClick = (resident) => {
-        setSelectedResident({ ...resident });
+        // Ensure phone number starts with +62
+        const phoneNumber = resident.phoneNumber.startsWith("+62")
+            ? resident.phoneNumber
+            : `+62${resident.phoneNumber.replace(/^0/, "")}`;
+
+        setSelectedResident({
+            ...resident,
+            phoneNumber,
+        });
         setOpenEditModal(true);
     };
 
@@ -67,13 +75,27 @@ const ResidentRecord = () => {
     };
 
     const handleAddClick = () => {
-        setNewResident({ name: "", phoneNumber: "" });
+        setNewResident({ name: "", phoneNumber: "+62" });
         setOpenAddModal(true);
     };
 
+    const validatePhoneNumber = (phoneNumber) => {
+        return (
+            phoneNumber.startsWith("+62") &&
+            phoneNumber.length >= 4 &&
+            /^\+62\d+$/.test(phoneNumber)
+        ); // Only allow digits after +62
+    };
+
     const handleAddResident = async () => {
-        if (!newResident.name || !newResident.phoneNumber) {
-            showAlert?.("warning", "Nama dan nomor telepon wajib diisi.");
+        if (
+            !newResident.name ||
+            !validatePhoneNumber(newResident.phoneNumber)
+        ) {
+            showAlert?.(
+                "warning",
+                "Nama wajib diisi dan nomor telepon harus diawali dengan +62 dan hanya berisi angka"
+            );
             return;
         }
 
@@ -90,13 +112,21 @@ const ResidentRecord = () => {
     };
 
     const handleUpdateResident = async () => {
+        if (!validatePhoneNumber(selectedResident.phoneNumber)) {
+            showAlert?.(
+                "warning",
+                "Nomor telepon harus diawali dengan +62 dan hanya berisi angka"
+            );
+            return;
+        }
+
         await updateResident({
             id: selectedResident.id,
             name: selectedResident.name,
             phoneNumber: selectedResident.phoneNumber,
-        })
-        const updated = residents.map((res) => 
-             res === selectedResident.original ? selectedResident : res
+        });
+        const updated = residents.map((res) =>
+            res === selectedResident.original ? selectedResident : res
         );
         setResidents(updated);
         showAlert?.("success", "Data warga berhasil diubah.");
@@ -117,6 +147,16 @@ const ResidentRecord = () => {
     const filteredResidents = residents.filter((res) =>
         res.name.toLowerCase().includes(searchTerm.toLowerCase())
     );
+
+    const handlePhoneNumberChange = (value, setter) => {
+        // Only allow + at the start and digits after that
+        const newValue = value.replace(/[^\+\d]/g, "");
+        if (!newValue.startsWith("+62")) {
+            setter("+62");
+        } else {
+            setter(newValue);
+        }
+    };
 
     return (
         <BlankCard>
@@ -291,12 +331,17 @@ const ResidentRecord = () => {
                             fullWidth
                             variant="outlined"
                             value={selectedResident?.phoneNumber || ""}
-                            onChange={(e) =>
-                                setSelectedResident((prev) => ({
-                                    ...prev,
-                                    phoneNumber: e.target.value,
-                                }))
-                            }
+                            onChange={(e) => {
+                                handlePhoneNumberChange(
+                                    e.target.value,
+                                    (value) =>
+                                        setSelectedResident((prev) => ({
+                                            ...prev,
+                                            phoneNumber: value,
+                                        }))
+                                );
+                            }}
+                            helperText="Nomor telepon harus diawali dengan +62 dan hanya berisi angka"
                         />
                     </DialogContent>
                     <DialogActions>
@@ -334,12 +379,17 @@ const ResidentRecord = () => {
                             fullWidth
                             variant="outlined"
                             value={newResident.phoneNumber}
-                            onChange={(e) =>
-                                setNewResident({
-                                    ...newResident,
-                                    phoneNumber: e.target.value,
-                                })
-                            }
+                            onChange={(e) => {
+                                handlePhoneNumberChange(
+                                    e.target.value,
+                                    (value) =>
+                                        setNewResident({
+                                            ...newResident,
+                                            phoneNumber: value,
+                                        })
+                                );
+                            }}
+                            helperText="Nomor telepon harus diawali dengan +62 dan hanya berisi angka"
                         />
                     </DialogContent>
                     <DialogActions>

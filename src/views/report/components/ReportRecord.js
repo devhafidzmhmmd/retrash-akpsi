@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
     Typography,
     Box,
@@ -18,9 +18,9 @@ import {
     DialogActions,
 } from "@mui/material";
 import BlankCard from "../../../components/shared/BlankCard";
-import report from "../../../dummy/report.json";
 import { IconPlus, IconUserPlus } from "@tabler/icons-react";
 import ReportForm from "./ReportForm";
+import { issueList } from "../../../api/issue";
 
 const ReportRecord = () => {
     const [page, setPage] = React.useState(0);
@@ -29,6 +29,18 @@ const ReportRecord = () => {
     const [selectedMonth, setSelectedMonth] = React.useState("");
     const [selectedYear, setSelectedYear] = React.useState("");
     const [openModal, setOpenModal] = React.useState(false);
+    const [issues, setIssues] = React.useState([]);
+
+    useEffect(() => {
+        fetchIssues();
+    }, []);
+
+    const fetchIssues = async () => {
+        const result = await issueList("", "");
+        if (result) {
+            setIssues(result);
+        }
+    };
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
@@ -43,7 +55,9 @@ const ReportRecord = () => {
     };
 
     const years = [
-        ...new Set(report.map((item) => new Date(item.date).getFullYear())),
+        ...new Set(
+            issues.map((item) => new Date(item.createdAt).getFullYear())
+        ),
     ].sort((a, b) => b - a);
 
     const months = [
@@ -61,9 +75,9 @@ const ReportRecord = () => {
         { value: "11", label: "Desember" },
     ];
 
-    const filteredReport = report.filter((item) => {
-        const itemDate = new Date(item.date);
-        const matchesSearch = item.name
+    const filteredReport = issues.filter((item) => {
+        const itemDate = new Date(item.createdAt);
+        const matchesSearch = item.officer.username
             .toLowerCase()
             .includes(searchTerm.toLowerCase());
         const matchesYear =
@@ -163,15 +177,7 @@ const ReportRecord = () => {
                                     variant="subtitle2"
                                     fontWeight={600}
                                 >
-                                    FOTO
-                                </Typography>
-                            </TableCell>
-                            <TableCell>
-                                <Typography
-                                    variant="subtitle2"
-                                    fontWeight={600}
-                                >
-                                    NAMA
+                                    NAMA PETUGAS
                                 </Typography>
                             </TableCell>
                             <TableCell>
@@ -201,33 +207,24 @@ const ReportRecord = () => {
                             .map((item) => (
                                 <TableRow key={item.id}>
                                     <TableCell>
-                                        {item.image && (
-                                            <Card sx={{ maxWidth: 200 }}>
-                                                <CardMedia
-                                                    component="img"
-                                                    height="100"
-                                                    image={item.image}
-                                                    alt="Laporan foto"
-                                                    sx={{ objectFit: "cover" }}
-                                                />
-                                            </Card>
-                                        )}
-                                    </TableCell>
-                                    <TableCell>
                                         <Typography
                                             sx={{
                                                 fontSize: "15px",
                                                 fontWeight: "500",
                                             }}
                                         >
-                                            {item.name}
+                                            {item.officer.username}
                                         </Typography>
                                     </TableCell>
                                     <TableCell>
                                         <Typography sx={{ fontSize: "13px" }}>
-                                            {new Date(
-                                                item.date
-                                            ).toLocaleDateString()}
+                                            {new Date(item.createdAt)
+                                                .toLocaleDateString("id-ID", {
+                                                    day: "2-digit",
+                                                    month: "long",
+                                                    year: "numeric",
+                                                })
+                                                .toUpperCase()}
                                         </Typography>
                                     </TableCell>
                                     <TableCell>
@@ -239,7 +236,7 @@ const ReportRecord = () => {
                                                 overflowWrap: "break-word",
                                             }}
                                         >
-                                            {item.content}
+                                            {item.description}
                                         </Typography>
                                     </TableCell>
                                 </TableRow>
@@ -266,13 +263,15 @@ const ReportRecord = () => {
                     <DialogContentText>
                         Silakan isi form berikut untuk menambahkan laporan baru
                     </DialogContentText>
-                    <ReportForm />
+                    <ReportForm
+                        onSuccess={() => {
+                            handleCloseModal();
+                            fetchIssues();
+                        }}
+                    />
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleCloseModal}>Batal</Button>
-                    <Button onClick={handleCloseModal} variant="contained">
-                        Simpan
-                    </Button>
                 </DialogActions>
             </Dialog>
         </BlankCard>

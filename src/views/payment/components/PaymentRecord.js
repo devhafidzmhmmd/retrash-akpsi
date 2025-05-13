@@ -227,9 +227,13 @@ const PaymentRecord = () => {
                                     </TableCell>
                                     <TableCell>
                                         <Typography fontSize="13px">
-                                            {new Date(
-                                                item.createdAt
-                                            ).toLocaleDateString()}
+                                            {new Date(item.createdAt)
+                                                .toLocaleDateString("id-ID", {
+                                                    day: "2-digit",
+                                                    month: "long",
+                                                    year: "numeric",
+                                                })
+                                                .toUpperCase()}
                                         </Typography>
                                     </TableCell>
                                 </TableRow>

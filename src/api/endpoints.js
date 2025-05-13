@@ -28,7 +28,12 @@ const OFFICER = {
 
 const ISSUE = {
     LIST: {
-        URL: `${BASE_URL}/issues`,
+        URL: `${BASE_URL}/issue-reports`,
+        METHOD: "GET",
+    },
+    CREATE: {
+        URL: `${BASE_URL}/issue-reports`,
+        METHOD: "POST",
     },
 };
 
