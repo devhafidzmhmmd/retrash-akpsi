@@ -29,3 +29,28 @@ export const getInvoiceList = async (filter, sort) => {
         return false;
     }
 };
+
+export const updateInvoiceStatus = async (id, status) => {
+    try {
+        const response = await axios({
+            method: INVOICE.LIST.METHOD,
+            url: INVOICE.LIST.URL + id,
+            data: {
+                status
+            },
+            headers: {
+                Authorization: `Bearer ${getToken()}`,
+            },
+        });
+        if (response.status === 200) {
+            return response.data;
+        } else {
+            return false;
+        }
+    } catch (error) {
+        if (error.response.status === 403) {
+            removeToken();
+        }
+        return false;
+    }
+};

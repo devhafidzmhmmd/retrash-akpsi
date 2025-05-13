@@ -60,6 +60,10 @@ const INVOICE = {
         URL: `${BASE_URL}/invoices`,
         METHOD: "GET",
     },
+    UPDATE: {
+        URL: `${BASE_URL}/invoices/`,
+        METHOD: "PATCH",
+    },
 };
 
 export { AUTH, OFFICER, ISSUE, RESIDENT, TRANSACTION, INVOICE };
